@@ -1,12 +1,12 @@
 import fetch from 'node-fetch';
 
-function GetCanaryScripts() {
+function getCanaryScripts() {
     return fetch('https://canary.discordapp.com/app')
         .then((response) => {
             return response.text();
         })
         .then((data) => {
-            return data.match(/assets\/[\w\d]+\.js/g);
+            return data.match(/assets\/[\w\d]+\.js/g).reverse();
         })
 }
 
@@ -17,29 +17,25 @@ function scrapeJsFiles(files) {
             return response.text();
         })
         .then((data) => {
-            let result = data.match(/Build Number: [\w.]+, Version Hash: [\w\d]+.*?(?=\")/);
-            return result;
+            let results = data.match(/Build Number: [\w.]+, Version Hash: [\w.]+/g);
+            return results;
         })
 }
 
-
-let jsFiles = await GetCanaryScripts();
-
-
+let indexOfFiles = await getCanaryScripts();
 
 const getDiscordBuild = async () => {
     let counter = 0
-    let files = jsFiles.length;
+    let files = indexOfFiles.length;
     let scrape;
 
     while (counter <= files) {        
         if (scrape === undefined || scrape === null) {
-            scrape = await scrapeJsFiles(jsFiles[counter]);
+            scrape = await scrapeJsFiles(indexOfFiles[counter]);
             counter++
         } else {
             counter = 9999; // It's over 9000!!!
-            let match = scrape[0];
-            return match;
+            return scrape;
         }
     }   
 }
