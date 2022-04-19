@@ -16,8 +16,7 @@ const scrapeIndexFiles = async (files) => {
             return response.text();
         })
         .then((data) => {
-            const results = data.match(/Build Number: [\w.]+, Version Hash: [\w.]+/g);
-            return results;
+            return data.match(/Build Number: [\w.]+, Version Hash: [\w.]+/g);
         })
 }
 
