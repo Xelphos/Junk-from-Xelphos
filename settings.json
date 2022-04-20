@@ -1,0 +1,10 @@
+{
+    "channelID": {
+        "Stable": "",
+        "Beta": "",
+        "Canary": ""
+    },
+    "botSettings": {
+        "discordUpdates": true
+    }
+}
