@@ -1,10 +1,10 @@
+const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const storedHashPath = './discordhash.json';
 const settingsPath = './settings.json';
 const releaseChannel = ['https://discordapp.com/', 'https://ptb.discordapp.com/', 'https://canary.discordapp.com/']; 
-const releaseChannelName = ['Stable', 'Beta', 'Canary']
-
+const releaseChannelName = ['Stable', 'PTB', 'Canary']
 
 const getIndexOfFiles = async (channel, index) => {
     const storedDiscordHash = JSON.parse(fs.readFileSync(storedHashPath));
@@ -59,16 +59,27 @@ const getAllReleaseBuilds = async () => {
     return discordReleases;
 }
 
-const sendDiscordUpdate = async () => {
+const sendDiscordUpdate = async (client) => {
     let getSetting = JSON.parse(fs.readFileSync(settingsPath));
     while (getSetting.botSettings.discordUpdates === true) {
         let discordUpdateData =  await getAllReleaseBuilds();
         for (let i = 0; i < discordUpdateData.length; i++) {
             if (discordUpdateData[i]) {
-                console.log(discordUpdateData[i])
                 let buildNumber = discordUpdateData[i][0]
                 let versionHash = discordUpdateData[i][1]
-                console.log(buildNumber, versionHash)
+                let buildID = discordUpdateData[i][1].slice(0, 7);
+                let channelID = getSetting.channelID[releaseChannelName[i]];
+                let updateEmbed = new MessageEmbed()
+                    .setColor('#ad87f3')
+                    .setTitle(`New ${releaseChannelName[i]} Update!`)
+                    .addFields(
+                        { name:'Build Number:', value: buildNumber, inline: true},
+                        { name:'Build ID:', value: buildID, inline: true},
+                        { name:'Version Hash:', value: versionHash},
+                    )
+                    .setTimestamp();
+                let channel = await client.channels.cache.get(`${channelID}`)
+                channel.send({embeds: [updateEmbed]})
             }
         }
         getSetting = JSON.parse(fs.readFileSync(settingsPath));
@@ -79,8 +90,11 @@ const sendDiscordUpdate = async () => {
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-(async () => {
-    console.log(await sendDiscordUpdate())
-})()
+// Call exported function in the same file you declare a variable for Discord Client and Intents
+// Then just pass it the variable you assigned to Client. EG: sendDiscordUpdate(client);
+module.exports = { sendDiscordUpdate };
+
+
+
 
 
