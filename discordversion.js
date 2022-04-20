@@ -14,7 +14,7 @@ const getIndexOfFiles = async (channel) => {
     return result;
 }
 
-const scrapeIndexFiles = async (channel, fileIndex) => {
+const searchIndexOfFiles = async (channel, fileIndex) => {
     const result = await fetch(`${channel}${fileIndex}`)
         .then((response) => {
             return response.text();
@@ -28,8 +28,8 @@ const scrapeIndexFiles = async (channel, fileIndex) => {
 const getIndividualReleaseBuild = async (release) => {
     const indexOfFiles = await getIndexOfFiles(releaseChannel[release]);
     for (const file in indexOfFiles) {
-        const scrapeIndex = await scrapeIndexFiles(releaseChannel[release], indexOfFiles[file]);
-        if (scrapeIndex) return scrapeIndex;
+        const indexSearchResults = await searchIndexOfFiles(releaseChannel[release], indexOfFiles[file]);
+        if (indexSearchResults) return indexSearchResults;
     }
 }
 
