@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "name": "discord-buildinfo-fetch",
+  "description": "Just some junk. Hello World!",
+  "version": "1.0.0",
+  "main": "discordversion.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xelphos/Junk-from-Xelphos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xelphos/Junk-from-Xelphos/issues"
+  },
+  "homepage": "https://github.com/Xelphos/Junk-from-Xelphos#readme"
+}
